@@ -6,6 +6,7 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { FadeIn } from "@/components/FadeIn";
 import { LevelsGraphic } from "@/components/LevelsGraphic";
 import { Portrait } from "@/components/Portrait";
+import { asset } from "@/lib/site";
 
 const roles = [
   { title: "Advies", audience: "voor organisaties" },
@@ -83,7 +84,7 @@ export default function Home() {
                     className="absolute -bottom-3 -right-3 left-4 top-4 rounded-[2rem] border border-forest/25"
                   />
                   <Portrait
-                    src="/images/thijs.png"
+                    src={asset("/images/thijs.png")}
                     alt="Portret van Thijs van Geenen"
                     priority
                     sizes="242px"

@@ -2,10 +2,16 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { sendContactMessage, type ContactMessage } from "@/app/contact/actions";
 import { Arrow, buttonClasses } from "@/components/Button";
 import { softEase } from "@/components/FadeIn";
 import { site } from "@/lib/site";
+
+type ContactMessage = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+};
 
 type Field = keyof ContactMessage;
 type Errors = Partial<Record<Field, string>>;
@@ -28,7 +34,7 @@ const inputBase =
 export function ContactForm() {
   const [values, setValues] = useState<ContactMessage>({ name: "", email: "", phone: "", message: "" });
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [sent, setSent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const thanksRef = useRef<HTMLHeadingElement>(null);
 
@@ -39,7 +45,8 @@ export function ContactForm() {
     setValues((v) => ({ ...v, [field]: e.target.value }));
   const blur = (field: Field) => () => setTouched((t) => ({ ...t, [field]: true }));
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  // De site is statisch (GitHub Pages), dus het bericht gaat via het e-mailprogramma van de bezoeker.
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setTouched({ name: true, email: true, phone: true, message: true });
 
@@ -49,13 +56,18 @@ export function ContactForm() {
       return;
     }
 
-    setStatus("sending");
-    try {
-      const result = await sendContactMessage(values);
-      setStatus(result.ok ? "sent" : "error");
-    } catch {
-      setStatus("error");
-    }
+    const body = [
+      `Naam: ${values.name.trim()}`,
+      `E-mail: ${values.email.trim()}`,
+      ...(values.phone.trim() ? [`Telefoon: ${values.phone.trim()}`] : []),
+      "",
+      values.message.trim(),
+    ].join("\n");
+    const subject = `Kennismaking via de website – ${values.name.trim()}`;
+    window.location.assign(
+      `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+    );
+    setSent(true);
   }
 
   const fieldProps = (field: Field) => {
@@ -95,7 +107,7 @@ export function ContactForm() {
 
   return (
     <AnimatePresence mode="wait">
-      {status === "sent" ? (
+      {sent ? (
         <motion.div
           key="bedankt"
           role="status"
@@ -114,6 +126,14 @@ export function ContactForm() {
             Bedankt voor je bericht, ik neem binnen één werkdag contact met je op.
           </h2>
           <p className="mt-4 max-w-prose text-ink-soft">
+            Je e-mailprogramma is geopend met je bericht erin. Klik daar op verzenden om het af te
+            ronden. Opende er niets? Mail dan direct naar{" "}
+            <a href={`mailto:${site.email}`} className="text-forest underline underline-offset-4">
+              {site.email}
+            </a>
+            .
+          </p>
+          <p className="mt-3 max-w-prose text-ink-soft">
             Heb je haast? Bel me gerust op{" "}
             <a href={site.phoneHref} className="text-forest underline underline-offset-4">
               {site.phone}
@@ -173,19 +193,9 @@ export function ContactForm() {
             {errorText("message")}
           </div>
 
-          {status === "error" && (
-            <p role="alert" className="rounded-xl bg-error/5 px-4 py-3 text-sm text-error">
-              Er ging iets mis bij het versturen. Probeer het opnieuw, of mail me direct op{" "}
-              <a href={`mailto:${site.email}`} className="underline underline-offset-4">
-                {site.email}
-              </a>
-              .
-            </p>
-          )}
-
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
-            <button type="submit" disabled={status === "sending"} className={buttonClasses("primary")}>
-              {status === "sending" ? "Versturen…" : "Verstuur bericht"}
+            <button type="submit" className={buttonClasses("primary")}>
+              Verstuur bericht
               <Arrow />
             </button>
             <p className="text-sm text-ink-soft">Ik reageer binnen één werkdag.</p>

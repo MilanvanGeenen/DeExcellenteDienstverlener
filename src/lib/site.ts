@@ -8,6 +8,9 @@ export const site = {
   email: "thijs@voorbeeld.nl",
 } as const;
 
+// next/image zet de basePath niet zelf voor losse src-paden.
+export const asset = (path: string) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+
 export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/over-thijs", label: "Over Thijs" },
