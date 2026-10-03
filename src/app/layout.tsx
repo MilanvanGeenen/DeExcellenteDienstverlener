@@ -1,44 +1,64 @@
-import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { MotionProvider } from "@/components/MotionProvider";
+import { Header } from "@/components/Header";
+import { JsonLd } from "@/components/JsonLd";
+import { RevealObserver } from "@/components/RevealObserver";
+import { organizationJsonLd } from "@/lib/seo";
+import { asset, SITE_URL } from "@/lib/site";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
+// Alleen Manrope (koppen, en daarmee de grootste zichtbare tekst) wordt voorgeladen.
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Thijs van Geenen | de excellente dienstverlener",
-    template: "%s | Thijs van Geenen",
+  metadataBase: new URL(`${SITE_URL}/`),
+  applicationName: "de excellente dienstverlener",
+  icons: {
+    icon: [
+      { url: asset("/icoon.svg"), type: "image/svg+xml" },
+      { url: asset("/favicon-32.png"), sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: asset("/apple-touch-icon.png"), sizes: "180x180" }],
   },
-  description:
-    "Ik help organisaties grip te krijgen op het werk, met teams die goed samenwerken en klanten die dat merken. Geen dikke rapporten, maar direct zichtbaar resultaat.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F7F4EE",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="nl" className={`${fraunces.variable} ${inter.variable} h-full`}>
-      <body className="flex min-h-full flex-col">
-        <MotionProvider>
-          <Navbar />
-          <main id="inhoud" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </MotionProvider>
+    <html lang="nl" className={`${manrope.variable} ${inter.variable}`}>
+      <head>
+        {/* Animaties bij scrollen alleen inschakelen als JavaScript draait. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body>
+        <a
+          href="#inhoud"
+          className="sr-only-focusable fixed left-4 top-4 z-[60] rounded-full bg-blauw-diep px-5 py-3 font-semibold text-wit-gebroken"
+        >
+          Naar de inhoud
+        </a>
+        <Header />
+        <main id="inhoud" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
+        <Footer />
+        <RevealObserver />
+        <JsonLd data={organizationJsonLd} />
       </body>
     </html>
   );

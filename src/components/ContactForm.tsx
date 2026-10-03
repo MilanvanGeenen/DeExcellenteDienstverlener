@@ -1,207 +1,209 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Arrow, buttonClasses } from "@/components/Button";
-import { softEase } from "@/components/FadeIn";
+import { Pijl, EmailAdres } from "@/components/ui";
 import { site } from "@/lib/site";
 
-type ContactMessage = {
-  name: string;
+type Velden = {
+  naam: string;
+  organisatie: string;
   email: string;
-  phone: string;
-  message: string;
+  telefoon: string;
+  onderwerp: string;
+  bericht: string;
 };
+type Veld = keyof Velden;
+type Fouten = Partial<Record<Veld, string>>;
 
-type Field = keyof ContactMessage;
-type Errors = Partial<Record<Field, string>>;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const verplicht: Veld[] = ["naam", "email", "bericht"];
+const onderwerpen = ["Teamontwikkeling", "Training & Coaching", "Advies", "Iets anders"];
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const fieldOrder: Field[] = ["name", "email", "phone", "message"];
+// Hetzelfde formulierdienst-adres als in het prototype (FormSubmit). De eerste inzending
+// stuurt een activatiemail naar het ontvangstadres; die moet één keer worden bevestigd.
+const VERZEND_URL = `https://formsubmit.co/ajax/${site.email}`;
 
-function validate(values: ContactMessage): Errors {
-  const errors: Errors = {};
-  if (!values.name.trim()) errors.name = "Vul je naam in.";
-  if (!values.email.trim()) errors.email = "Vul je e-mailadres in.";
-  else if (!EMAIL_PATTERN.test(values.email.trim())) errors.email = "Dit lijkt geen geldig e-mailadres.";
-  if (!values.message.trim()) errors.message = "Laat een kort bericht achter.";
-  return errors;
+function controleer(v: Velden): Fouten {
+  const f: Fouten = {};
+  if (!v.naam.trim()) f.naam = "Vul je naam in.";
+  if (!v.email.trim()) f.email = "Vul je e-mailadres in.";
+  else if (!EMAIL.test(v.email.trim())) f.email = "Dit e-mailadres lijkt niet te kloppen.";
+  if (!v.bericht.trim()) f.bericht = "Vertel ons kort waar we je mee kunnen helpen.";
+  return f;
 }
 
-const inputBase =
-  "block w-full rounded-xl border bg-cream px-4 py-3.5 text-base text-ink transition-[border-color,box-shadow] duration-300 placeholder:text-ink-soft/50 focus:outline-none focus:ring-4";
+function FoutIcoon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <circle cx="8" cy="8" r="6.5" />
+      <path d="M8 4.75v3.75M8 11h.01" strokeLinecap="round" />
+    </svg>
+  );
+}
 
-export function ContactForm() {
-  const [values, setValues] = useState<ContactMessage>({ name: "", email: "", phone: "", message: "" });
-  const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
-  const [sent, setSent] = useState(false);
+export function ContactForm({ idPrefix = "contact" }: { idPrefix?: string }) {
+  const [waarden, setWaarden] = useState<Velden>({
+    naam: "",
+    organisatie: "",
+    email: "",
+    telefoon: "",
+    onderwerp: onderwerpen[0],
+    bericht: "",
+  });
+  const [aangeraakt, setAangeraakt] = useState<Partial<Record<Veld, boolean>>>({});
+  const [status, setStatus] = useState<"invullen" | "versturen" | "verzonden" | "fout">("invullen");
   const formRef = useRef<HTMLFormElement>(null);
-  const thanksRef = useRef<HTMLHeadingElement>(null);
+  const bedanktRef = useRef<HTMLHeadingElement>(null);
 
-  const errors = validate(values);
-  const visibleError = (field: Field) => (touched[field] ? errors[field] : undefined);
+  const fouten = controleer(waarden);
+  const toonFout = (v: Veld) => (aangeraakt[v] ? fouten[v] : undefined);
+  const id = (v: Veld) => `${idPrefix}-${v}`;
 
-  const update = (field: Field) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setValues((v) => ({ ...v, [field]: e.target.value }));
-  const blur = (field: Field) => () => setTouched((t) => ({ ...t, [field]: true }));
+  const veldProps = (v: Veld) => ({
+    id: id(v),
+    name: v,
+    value: waarden[v],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setWaarden((w) => ({ ...w, [v]: e.target.value })),
+    onBlur: () => setAangeraakt((a) => ({ ...a, [v]: true })),
+    "aria-invalid": toonFout(v) ? true : undefined,
+    "aria-describedby": toonFout(v) ? `${id(v)}-fout` : undefined,
+  });
 
-  // De site is statisch (GitHub Pages), dus het bericht gaat via het e-mailprogramma van de bezoeker.
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const foutTekst = (v: Veld) =>
+    toonFout(v) && (
+      <p id={`${id(v)}-fout`} className="veld-fout">
+        <FoutIcoon />
+        {toonFout(v)}
+      </p>
+    );
+
+  async function verstuur(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setTouched({ name: true, email: true, phone: true, message: true });
-
-    const firstInvalid = fieldOrder.find((f) => errors[f]);
-    if (firstInvalid) {
-      formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+    setAangeraakt({ naam: true, email: true, bericht: true });
+    const eerste = verplicht.find((v) => fouten[v]);
+    if (eerste) {
+      formRef.current?.querySelector<HTMLElement>(`#${id(eerste)}`)?.focus();
       return;
     }
 
-    const body = [
-      `Naam: ${values.name.trim()}`,
-      `E-mail: ${values.email.trim()}`,
-      ...(values.phone.trim() ? [`Telefoon: ${values.phone.trim()}`] : []),
-      "",
-      values.message.trim(),
-    ].join("\n");
-    const subject = `Kennismaking via de website – ${values.name.trim()}`;
-    window.location.assign(
-      `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-    );
-    setSent(true);
+    const honing = new FormData(e.currentTarget).get("_honey");
+    if (honing) return;
+
+    setStatus("versturen");
+    try {
+      const res = await fetch(VERZEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          Naam: waarden.naam.trim(),
+          Organisatie: waarden.organisatie.trim(),
+          "E-mail": waarden.email.trim(),
+          Telefoon: waarden.telefoon.trim(),
+          Onderwerp: waarden.onderwerp,
+          Bericht: waarden.bericht.trim(),
+          _subject: `Kennismaking via de website: ${waarden.naam.trim()}`,
+          _replyto: waarden.email.trim(),
+          _template: "table",
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (!res.ok || String(data.success) !== "true") throw new Error("Versturen mislukt");
+      setStatus("verzonden");
+      requestAnimationFrame(() => bedanktRef.current?.focus());
+    } catch {
+      setStatus("fout");
+    }
   }
 
-  const fieldProps = (field: Field) => {
-    const error = visibleError(field);
-    return {
-      id: field,
-      name: field,
-      value: values[field],
-      onChange: update(field),
-      onBlur: blur(field),
-      "aria-invalid": error ? true : undefined,
-      "aria-describedby": error ? `${field}-fout` : undefined,
-      className: `${inputBase} ${
-        error
-          ? "border-error focus:border-error focus:ring-error/10"
-          : "border-line hover:border-ink/25 focus:border-forest focus:ring-forest/10"
-      }`,
-    };
-  };
-
-  const errorText = (field: Field) => (
-    <AnimatePresence initial={false}>
-      {visibleError(field) && (
-        <motion.p
-          id={`${field}-fout`}
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="mt-2 text-sm text-error"
-        >
-          {visibleError(field)}
-        </motion.p>
-      )}
-    </AnimatePresence>
-  );
+  if (status === "verzonden") {
+    return (
+      <div className="bedankt" role="status">
+        <span className="bedankt-icoon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12.5l4.5 4.5L19 7.5" />
+          </svg>
+        </span>
+        <h2 ref={bedanktRef} tabIndex={-1} className="h3 outline-none">
+          Bedankt voor je bericht.
+        </h2>
+        <p className="subtekst leesbreedte">
+          We nemen binnen twee werkdagen contact met je op. Heb je haast? Bel ons gerust op{" "}
+          <a href={site.phoneHref} className="font-semibold text-turkoois-tekst underline underline-offset-4">
+            {site.phone}
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <AnimatePresence mode="wait">
-      {sent ? (
-        <motion.div
-          key="bedankt"
-          role="status"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: softEase }}
-          onAnimationComplete={() => thanksRef.current?.focus()}
-          className="flex flex-col items-start py-10 md:py-16"
-        >
-          <span className="flex size-14 items-center justify-center rounded-full bg-forest-soft text-forest">
-            <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 12.5l4.5 4.5L19 7.5" />
-            </svg>
-          </span>
-          <h2 ref={thanksRef} tabIndex={-1} className="mt-8 text-h3 focus:outline-none">
-            Bedankt voor je bericht, ik neem binnen één werkdag contact met je op.
-          </h2>
-          <p className="mt-4 max-w-prose text-ink-soft">
-            Je e-mailprogramma is geopend met je bericht erin. Klik daar op verzenden om het af te
-            ronden. Opende er niets? Mail dan direct naar{" "}
-            <a href={`mailto:${site.email}`} className="text-forest underline underline-offset-4">
-              {site.email}
-            </a>
-            .
-          </p>
-          <p className="mt-3 max-w-prose text-ink-soft">
-            Heb je haast? Bel me gerust op{" "}
-            <a href={site.phoneHref} className="text-forest underline underline-offset-4">
-              {site.phone}
-            </a>
-            .
-          </p>
-        </motion.div>
-      ) : (
-        <motion.form
-          key="formulier"
-          ref={formRef}
-          noValidate
-          onSubmit={onSubmit}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.35 }}
-          className="grid gap-6"
-        >
-          <div className="mb-2">
-            <h2 className="text-h3">Stuur een bericht</h2>
-            <p className="mt-2 text-ink-soft">Vul je gegevens in, dan neem ik contact met je op.</p>
-          </div>
+    <form ref={formRef} className="formulier" noValidate onSubmit={verstuur}>
+      <div className="formulier-rij">
+        <div className="veld">
+          <label htmlFor={id("naam")}>Naam</label>
+          <input type="text" autoComplete="name" placeholder="Je naam" {...veldProps("naam")} />
+          {foutTekst("naam")}
+        </div>
+        <div className="veld">
+          <label htmlFor={id("organisatie")}>
+            Organisatie <span className="optioneel">optioneel</span>
+          </label>
+          <input type="text" autoComplete="organization" placeholder="Je organisatie" {...veldProps("organisatie")} />
+        </div>
+      </div>
 
-          <div>
-            <label htmlFor="name" className="mb-2 block text-[0.95rem] font-medium">
-              Naam
-            </label>
-            <input type="text" autoComplete="name" {...fieldProps("name")} />
-            {errorText("name")}
-          </div>
+      <div className="formulier-rij">
+        <div className="veld">
+          <label htmlFor={id("email")}>E-mail</label>
+          <input type="email" autoComplete="email" inputMode="email" placeholder="naam@organisatie.nl" {...veldProps("email")} />
+          {foutTekst("email")}
+        </div>
+        <div className="veld">
+          <label htmlFor={id("telefoon")}>
+            Telefoon <span className="optioneel">optioneel</span>
+          </label>
+          <input type="tel" autoComplete="tel" inputMode="tel" placeholder="06 12345678" {...veldProps("telefoon")} />
+        </div>
+      </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div>
-              <label htmlFor="email" className="mb-2 block text-[0.95rem] font-medium">
-                E-mail
-              </label>
-              <input type="email" autoComplete="email" inputMode="email" {...fieldProps("email")} />
-              {errorText("email")}
-            </div>
-            <div>
-              <label htmlFor="phone" className="mb-2 flex items-baseline justify-between text-[0.95rem] font-medium">
-                Telefoon <span className="text-sm font-normal text-ink-soft">optioneel</span>
-              </label>
-              <input type="tel" autoComplete="tel" inputMode="tel" {...fieldProps("phone")} />
-            </div>
-          </div>
+      <div className="veld">
+        <label htmlFor={id("onderwerp")}>Waar kunnen we je mee helpen?</label>
+        <select {...veldProps("onderwerp")}>
+          {onderwerpen.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          <div>
-            <label htmlFor="message" className="mb-2 block text-[0.95rem] font-medium">
-              Bericht
-            </label>
-            <textarea
-              rows={6}
-              placeholder="Waar loop je tegenaan, of waar wil je over sparren?"
-              {...fieldProps("message")}
-              className={`${fieldProps("message").className} resize-y`}
-            />
-            {errorText("message")}
-          </div>
+      <div className="veld">
+        <label htmlFor={id("bericht")}>Bericht</label>
+        <textarea rows={5} placeholder="Vertel kort waar je tegenaan loopt of wat je zoekt." {...veldProps("bericht")} />
+        {foutTekst("bericht")}
+      </div>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
-            <button type="submit" className={buttonClasses("primary")}>
-              Verstuur bericht
-              <Arrow />
-            </button>
-            <p className="text-sm text-ink-soft">Ik reageer binnen één werkdag.</p>
-          </div>
-        </motion.form>
+      <input type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+
+      {status === "fout" && (
+        <p role="alert" className="formulier-melding" data-soort="fout">
+          Het versturen is niet gelukt. Probeer het opnieuw, of mail ons via{" "}
+          <a href={`mailto:${site.email}`} className="font-semibold underline underline-offset-4">
+            <EmailAdres />
+          </a>
+          .
+        </p>
       )}
-    </AnimatePresence>
+
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
+        <button type="submit" className="btn btn-primair" disabled={status === "versturen"}>
+          {status === "versturen" ? "Versturen…" : "Plan een kennismaking"}
+          {status !== "versturen" && <Pijl />}
+        </button>
+        <p className="text-[0.9rem] subtekst">We reageren binnen twee werkdagen.</p>
+      </div>
+    </form>
   );
 }

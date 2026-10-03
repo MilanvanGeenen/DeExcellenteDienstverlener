@@ -1,11 +1,9 @@
 import type { NextConfig } from "next";
-
-// Op GitHub Pages staat de site in een submap (/<repo-naam>); lokaal blijft dit leeg.
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+import { BASE_PATH } from "./src/lib/siteUrl";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath,
+  basePath: BASE_PATH,
   trailingSlash: true,
   images: {
     unoptimized: true,

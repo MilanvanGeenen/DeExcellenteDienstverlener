@@ -1,59 +1,75 @@
 import Link from "next/link";
-import { navLinks, site } from "@/lib/site";
+import { Logo } from "@/components/Logo";
+import { navLinks, services, site } from "@/lib/site";
+import { EmailAdres } from "@/components/ui";
+
+// Het jaartal wordt bij het bouwen in de HTML gezet, dus het klopt ook zonder JavaScript.
+const jaar = new Date().getFullYear();
 
 export function Footer() {
   return (
-    <footer className="bg-forest text-cream">
-      <div className="container-page grid gap-12 py-16 md:grid-cols-12 md:gap-8 md:py-20">
-        <div className="md:col-span-5">
-          <p className="font-serif text-2xl tracking-tight">{site.name}</p>
-          <p className="mt-2 text-[0.72rem] uppercase tracking-[0.16em] text-cream/60">{site.brand}</p>
-          <p className="mt-6 max-w-xs text-cream/75">
-            Geen dikke rapporten, maar direct zichtbaar resultaat.
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div>
+          <Link href="/" className="inline-block">
+            <Logo variant="donker" height={40} alt="de excellente dienstverlener, naar de homepage" />
+          </Link>
+          <p className="mt-6 max-w-xs">
+            Wij helpen mensen, teams en organisaties samenwerken, groeien en beter presteren.
           </p>
         </div>
 
-        <div className="md:col-span-4">
-          <h2 className="font-sans text-[0.78rem] font-medium uppercase tracking-[0.18em] text-cream/60">
-            Contact
-          </h2>
-          <ul className="mt-5 space-y-2 text-[1.05rem]">
-            <li>
-              <a href={site.phoneHref} className="transition-colors hover:text-sand-deep">
-                {site.phone}
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${site.email}`} className="break-all transition-colors hover:text-sand-deep">
-                {site.email}
-              </a>
-            </li>
-            <li className="text-cream/75">{site.location}</li>
-          </ul>
-        </div>
-
-        <nav aria-label="Footermenu" className="md:col-span-3">
-          <h2 className="font-sans text-[0.78rem] font-medium uppercase tracking-[0.18em] text-cream/60">
-            Menu
-          </h2>
-          <ul className="mt-5 space-y-2">
+        <nav aria-label="Footermenu">
+          <p className="footer-kop">Menu</p>
+          <ul className="footer-lijst">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-cream/85 transition-colors hover:text-cream">
-                  {link.label}
-                </Link>
+                <Link href={link.href}>{link.label}</Link>
               </li>
             ))}
           </ul>
         </nav>
+
+        <nav aria-label="Diensten">
+          <p className="footer-kop">Diensten</p>
+          <ul className="footer-lijst">
+            {services.map((s) => (
+              <li key={s.href}>
+                <Link href={s.href}>{s.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          <p className="footer-kop">Contact</p>
+          <ul className="footer-lijst">
+            <li>
+              <a href={site.phoneHref}>{site.phone}</a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`}>
+                <EmailAdres />
+              </a>
+            </li>
+            <li className="text-[rgba(247,244,238,0.85)]">
+              {site.city}, {site.region}
+            </li>
+            <li>
+              <a href={site.linkedin} rel="noopener" target="_blank">
+                LinkedIn<span className="sr-only"> (opent in nieuw venster)</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div className="border-t border-cream/15">
-        <div className="container-page flex flex-col gap-2 py-6 text-sm text-cream/60 md:flex-row md:justify-between">
+      <div className="container">
+        <div className="footer-onder">
           <p>
-            © {new Date().getFullYear()} {site.name} · {site.brand}
+            © {jaar} {site.name}
           </p>
-          <p>Zelfstandig sinds april 2024</p>
+          <Link href="/privacyverklaring/">Privacyverklaring</Link>
         </div>
       </div>
     </footer>
