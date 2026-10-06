@@ -2061,7 +2061,7 @@
   font-size: 1.4rem;
 }
 
-.prose-blok ul {
+.prose-blok ul:not([class]) {
   list-style: disc;
   padding-left: 1.25rem;
 }
