@@ -12,7 +12,7 @@ export function StructuurBeeld() {
       <div className="structuur-gloed" aria-hidden="true" />
       <div className="structuur-vlak">
         <svg className="structuur-laag teken-raster" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-          <g stroke="#0E5A75" fill="none">
+          <g stroke="var(--blauw-logo)" fill="none">
             <g strokeOpacity="0.09">
               {raster.map((p) => (
                 <g key={p}>
@@ -50,7 +50,7 @@ export function StructuurBeeld() {
             width="398.5"
             height="398.5"
             fill="none"
-            stroke="#0E5A75"
+            stroke="var(--blauw-logo)"
             strokeWidth="1.5"
             pathLength={1}
             vectorEffect="non-scaling-stroke"

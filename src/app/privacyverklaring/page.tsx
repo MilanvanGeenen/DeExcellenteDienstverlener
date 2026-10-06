@@ -46,7 +46,7 @@ export default function Privacyverklaring() {
             <h2 className="h3">Hoe het formulier wordt verstuurd</h2>
             <p>
               Berichten via het contactformulier worden verstuurd met de dienst FormSubmit, die ze doorstuurt naar onze
-              mailbox. Bel of mail je ons liever rechtstreeks, dan kan dat natuurlijk ook.
+              mailbox. Bel of mail je ons liever rechtstreeks, dan kan dat ook.
             </p>
 
             <h2 className="h3">Hoe lang we gegevens bewaren</h2>

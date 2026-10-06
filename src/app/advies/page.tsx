@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "Blijven jullie ook betrokken bij de uitvoering?",
     answer:
-      "Ja, dat kan. We geven niet alleen een advies mee, maar denken ook mee bij de uitvoering ervan: van begeleiding van een implementatietraject tot training van betrokken medewerkers.",
+      "Ja, dat kan. We denken ook mee bij de uitvoering: we begeleiden het implementatietraject of trainen de betrokken medewerkers.",
   },
   {
     question: "Is dit alleen voor grote organisaties?",
@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "Leveren jullie ook een schriftelijk advies of rapport op?",
     answer:
-      "Waar dat waarde toevoegt wel, maar nooit als doel op zich. Belangrijker dan een dik rapport vinden we een aanpak die de organisatie ook echt verder helpt.",
+      "Waar dat waarde toevoegt wel, maar nooit als doel op zich. Belangrijker dan een dik rapport vinden we een aanpak die de organisatie verder helpt.",
   },
 ];
 
@@ -69,8 +69,7 @@ export default function Advies() {
         <p className="lead">Advies betekent bij ons niet dat we van buitenaf vertellen hoe het moet.</p>
         <p className="subtekst">
           Wij kennen de context niet zo goed als de mensen die er dagelijks werken, en zij kennen de valkuilen van een
-          aanpak niet altijd zo goed als wij. Door die twee te combineren ontstaat een advies dat niet alleen goed
-          doordacht is, maar ook echt uitvoerbaar.
+          aanpak niet altijd zo goed als wij. Samen komen we tot een advies dat doordacht én uitvoerbaar is.
         </p>
       </TekstSectie>
 
@@ -81,7 +80,7 @@ export default function Advies() {
           { titel: "Luisteren", tekst: "We beginnen met goed luisteren naar wat er speelt, vanuit verschillende invalshoeken binnen de organisatie." },
           { titel: "Analyseren", tekst: "We brengen de situatie, de oorzaken en de mogelijke aanpakken helder in kaart." },
           { titel: "Adviseren", tekst: "We komen met een concreet, onderbouwd advies, afgestemd op wat haalbaar is binnen de organisatie." },
-          { titel: "Uitvoeren", tekst: "Waar gewenst blijven we betrokken bij de uitvoering, zodat het advies ook echt landt." },
+          { titel: "Uitvoeren", tekst: "Waar gewenst blijven we betrokken bij de uitvoering, zodat het advies in de praktijk landt." },
           { titel: "Evalueren", tekst: "We toetsen het resultaat en stellen bij waar nodig, zodat de verbetering doorgaat." },
         ]}
       />
@@ -90,8 +89,7 @@ export default function Advies() {
         <p className="lead">Ons advieswerk is niet voorbehouden aan grote organisaties.</p>
         <p className="subtekst">
           We werken met mkb-bedrijven, non-profitorganisaties en teams binnen grotere organisaties die behoefte hebben
-          aan een frisse, onafhankelijke blik. En aan een aanpak die echt wordt uitgevoerd, geen rapport dat in een la
-          verdwijnt.
+          aan een frisse, onafhankelijke blik. En aan een aanpak die in de praktijk wordt uitgevoerd, in plaats van een rapport dat in een la verdwijnt.
         </p>
       </TekstSectie>
 

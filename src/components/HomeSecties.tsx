@@ -1,4 +1,5 @@
 import { FotoPlek } from "@/components/FotoPlek";
+import { Spotlight } from "@/components/Spotlight";
 import { PijlLink, Reveal } from "@/components/ui";
 import { pillars, services, workSteps } from "@/lib/site";
 
@@ -27,24 +28,30 @@ export function WerkwijzeTijdlijn() {
 
 export function DienstKaarten({ headingLevel = 3 }: { headingLevel?: 2 | 3 }) {
   const Kop = headingLevel === 2 ? "h2" : "h3";
+  // Inschuif-animatie op het lijst-element, hover op de kaart: anders overschrijven ze elkaars transform.
   return (
-    <ul className="dienst-grid">
-      {services.map((s, i) => (
-        <Reveal as="li" key={s.slug} delay={i * 0.08} className="dienst-kaart">
-          <div className="dienst-beeld">
-            <FotoPlek label={s.title} />
-          </div>
-          <div className="dienst-inhoud">
-            <span className="dienst-nummer" aria-hidden="true">
-              0{i + 1}
-            </span>
-            <Kop className="h3">{s.title}</Kop>
-            <p className="subtekst">{s.summary}</p>
-            <PijlLink href={s.href}>{s.linkLabel}</PijlLink>
-          </div>
-        </Reveal>
-      ))}
-    </ul>
+    <>
+      <ul className="dienst-grid">
+        {services.map((s, i) => (
+          <Reveal as="li" key={s.slug} delay={i * 0.08} className="flex">
+            <div className="dienst-kaart flex-1">
+              <div className="dienst-beeld">
+                <FotoPlek label={s.title} />
+              </div>
+              <div className="dienst-inhoud">
+                <span className="dienst-nummer" aria-hidden="true">
+                  0{i + 1}
+                </span>
+                <Kop className="h3">{s.title}</Kop>
+                <p className="subtekst">{s.summary}</p>
+                <PijlLink href={s.href}>{s.linkLabel}</PijlLink>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </ul>
+      <Spotlight />
+    </>
   );
 }
 

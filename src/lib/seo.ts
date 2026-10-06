@@ -26,25 +26,46 @@ export function pageMetadata({ path, title, description, noindex }: PageMeta): M
   };
 }
 
+// Organisatie en website in één graaf, zodat Google ze aan elkaar koppelt.
 export const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "@id": ORG_ID,
-  name: site.name,
-  description: site.tagline,
-  url: absoluteUrl("/"),
-  logo: absoluteUrl("/logo.png"),
-  image: ogImage.url,
-  telephone: site.phoneIntl,
-  email: site.email,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: site.city,
-    addressRegion: site.region,
-    addressCountry: "NL",
-  },
-  areaServed: { "@type": "Country", name: "Nederland" },
-  sameAs: [site.linkedin],
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": ORG_ID,
+      name: site.name,
+      description: site.tagline,
+      url: absoluteUrl("/"),
+      logo: absoluteUrl("/logo.png"),
+      image: ogImage.url,
+      telephone: site.phoneIntl,
+      email: site.email,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.city,
+        addressRegion: site.region,
+        addressCountry: "NL",
+      },
+      areaServed: { "@type": "Country", name: "Nederland" },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        telephone: site.phoneIntl,
+        email: site.email,
+        availableLanguage: "nl",
+      },
+      knowsAbout: ["Teamontwikkeling", "Training", "Coaching", "Klantgerichtheid", "Samenwerking in teams", "Organisatieontwikkeling"],
+      sameAs: [site.linkedin],
+    },
+    {
+      "@type": "WebSite",
+      "@id": absoluteUrl("/#website"),
+      url: absoluteUrl("/"),
+      name: site.name,
+      inLanguage: "nl-NL",
+      publisher: { "@id": ORG_ID },
+    },
+  ],
 };
 
 export type Crumb = { name: string; path: string };

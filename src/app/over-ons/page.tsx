@@ -15,7 +15,7 @@ const overtuigingen = [
   { kop: "Klantgeluk.", tekst: "Een goede klantervaring begint bij een organisatie die intern goed is afgestemd." },
   { kop: "Betere samenwerking.", tekst: "De meeste vraagstukken in organisaties zijn uiteindelijk samenwerkingsvraagstukken." },
   { kop: "Betere dienstverlening.", tekst: "Kleine verbeteringen in hoe mensen met elkaar en met klanten omgaan, hebben grote impact." },
-  { kop: "Betere resultaten.", tekst: "Dit alles is geen doel op zich, maar de basis voor structureel betere resultaten." },
+  { kop: "Betere resultaten.", tekst: "Samen vormen ze de basis voor betere resultaten." },
 ];
 
 export default function OverOns() {
@@ -28,15 +28,15 @@ export default function OverOns() {
         ]}
         eyebrow="Over ons: waarom wij dit doen"
         titel="De werkende wereld een gelukkiger plek maken."
-        lead="Dat is waarom de excellente dienstverlener bestaat. Het is niet alleen een mooie zin, maar de maatstaf waar we ons eigen werk aan afmeten."
+        lead="Daarom bestaat de excellente dienstverlener. Het is ook de maatstaf waarmee we ons eigen werk beoordelen."
       />
 
       <TekstSectie eyebrow="Waarom dienstverlener" titel="Omdat voldoening voortkomt uit waarde voor anderen." id="dienstverlener" lijn>
         <p className="lead">We noemen onszelf bewust dienstverlener, niet adviesbureau of trainingsinstituut.</p>
         <p className="subtekst">
-          Onze voldoening komt niet uit een mooi rapport of een gewaardeerde trainingsdag, maar uit het effect ervan: een
+          Onze voldoening zit in het effect van ons werk: een
           team dat weer beter samenwerkt, een medewerker die met meer plezier naar het werk gaat, een organisatie die
-          haar klanten beter kan bedienen. Dienstverlening betekent voor ons: er echt toe doen voor de mensen en
+          haar klanten beter kan bedienen. Dienstverlening betekent voor ons: ertoe doen voor de mensen en
           organisaties waarmee we werken.
         </p>
       </TekstSectie>
@@ -80,9 +80,7 @@ export default function OverOns() {
               Altijd eerst goed luisteren en begrijpen, voordat we een aanpak voorstellen.
             </p>
             <p className="subtekst">
-              Nooit een standaardpakket, wel een aanpak die is toegesneden op de organisatie, de mensen en het
-              vraagstuk. En altijd met oog voor wat er nodig is om verandering te laten beklijven, niet alleen voor de
-              duur van een traject.
+              Elke aanpak stemmen we af op de organisatie, de mensen en het vraagstuk. En we letten op wat er nodig is om verandering te laten beklijven, ook als het traject is afgerond.
             </p>
             <PijlLink href="/werkwijze/">Bekijk onze werkwijze</PijlLink>
           </Reveal>

@@ -119,10 +119,13 @@ export function ContactForm({ idPrefix = "contact" }: { idPrefix?: string }) {
   if (status === "verzonden") {
     return (
       <div className="bedankt" role="status">
-        <span className="bedankt-icoon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12.5l4.5 4.5L19 7.5" />
-          </svg>
+        {/* De vijf sterren uit het logo: een excellente eerste stap. */}
+        <span className="bedankt-sterren" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <svg key={i} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2Q13.2 10.8 22 12Q13.2 13.2 12 22Q10.8 13.2 2 12Q10.8 10.8 12 2Z" />
+            </svg>
+          ))}
         </span>
         <h2 ref={bedanktRef} tabIndex={-1} className="h3 outline-none">
           Bedankt voor je bericht.
@@ -198,11 +201,14 @@ export function ContactForm({ idPrefix = "contact" }: { idPrefix?: string }) {
       )}
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
-        <button type="submit" className="btn btn-primair" disabled={status === "versturen"}>
-          {status === "versturen" ? "Versturen…" : "Plan een kennismaking"}
-          {status !== "versturen" && <Pijl />}
+        <button type="submit" className="btn btn-primair" disabled={status === "versturen"} aria-busy={status === "versturen"}>
+          Plan een kennismaking
+          {status === "versturen" ? <span className="btn-laden" aria-hidden="true" /> : <Pijl />}
         </button>
-        <p className="text-[0.9rem] subtekst">We reageren binnen twee werkdagen.</p>
+        <span className="sr-only" role="status">
+          {status === "versturen" ? "We versturen je bericht." : ""}
+        </span>
+        <p className="text-[0.9rem] subtekst">Vrijblijvend. We reageren binnen twee werkdagen.</p>
       </div>
     </form>
   );

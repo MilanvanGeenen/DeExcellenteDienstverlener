@@ -33,7 +33,7 @@ const diensten = [
     nummer: "02",
     titel: "Training & Coaching",
     kern: "Persoonlijke en professionele ontwikkeling, slimmer werken, klantgerichtheid en effectiviteit.",
-    tekst: "Soms zit de sleutel tot verandering niet in het team als geheel, maar in de vaardigheden en het gedrag van medewerkers en leidinggevenden. Met training werken we aan concrete vaardigheden; met coaching begeleiden we mensen persoonlijk in hun ontwikkeling. Beide stellen we op maat samen, nooit als vast programma van de plank.",
+    tekst: "Soms zit de sleutel tot verandering in de vaardigheden en het gedrag van medewerkers en leidinggevenden. Met training werken we aan concrete vaardigheden; met coaching begeleiden we mensen persoonlijk in hun ontwikkeling. Beide stellen we op maat samen.",
     punten: ["Slimmer werken en prioriteiten stellen", "Klantgericht communiceren", "Feedback geven en ontvangen", "Persoonlijke effectiviteit"],
     href: "/training-coaching/",
     link: "Meer over training & coaching",

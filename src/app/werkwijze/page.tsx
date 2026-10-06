@@ -26,7 +26,7 @@ export default function Werkwijze() {
         ]}
         eyebrow="Onze werkwijze"
         titel="Van vraagstuk naar blijvende verandering."
-        lead="Dit is hoe wij werken, onder al onze diensten. Geen vast stappenplan dat we over elke situatie heen leggen, maar een consequente manier van kijken en werken: van de eerste kennismaking tot en met de evaluatie."
+        lead="Dit is hoe wij werken, onder al onze diensten. Een vaste manier van kijken en werken die we per situatie invullen, van de eerste kennismaking tot en met de evaluatie."
       />
 
       <section className="section pt-0!" aria-labelledby="stappen-kop">
@@ -37,8 +37,7 @@ export default function Werkwijze() {
             </Reveal>
             <Reveal delay={0.08}>
               <p className="lead leesbreedte">
-                Elk traject doorloopt in essentie dezelfde zes stappen. Niet als star protocol, maar als vaste denkwijze
-                die zorgt dat we nooit te snel naar een oplossing grijpen, voordat we het vraagstuk echt begrijpen.
+                Elk traject doorloopt dezelfde zes stappen. Zo grijpen we niet te snel naar een oplossing en begrijpen we eerst het vraagstuk.
               </p>
             </Reveal>
           </div>
@@ -74,11 +73,13 @@ export default function Werkwijze() {
           </Reveal>
           <ul className="verder-grid mt-12" style={{ "--kolommen": 3 } as React.CSSProperties}>
             {services.map((s, i) => (
-              <Reveal as="li" key={s.href} delay={i * 0.06} className="verder-kaart">
-                <p className="eyebrow">0{i + 1}</p>
-                <h3 className="h3">{s.title}</h3>
-                <p className="subtekst">{toepassing[i]}</p>
-                <PijlLink href={s.href}>{s.linkLabel}</PijlLink>
+              <Reveal as="li" key={s.href} delay={i * 0.06} className="flex">
+                <div className="verder-kaart flex-1">
+                  <p className="eyebrow">0{i + 1}</p>
+                  <h3 className="h3">{s.title}</h3>
+                  <p className="subtekst">{toepassing[i]}</p>
+                  <PijlLink href={s.href}>{s.linkLabel}</PijlLink>
+                </div>
               </Reveal>
             ))}
           </ul>

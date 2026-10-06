@@ -160,11 +160,13 @@ export function VerderLezen({ items, achtergrond = "licht" }: { items: VerderIte
         </h2>
         <ul className="verder-grid" style={{ "--kolommen": items.length } as React.CSSProperties}>
           {items.map((item, i) => (
-            <Reveal as="li" key={item.href} delay={i * 0.06} className="verder-kaart">
-              <p className="eyebrow">{item.eyebrow}</p>
-              <h3 className="h3">{item.titel}</h3>
-              <p className="subtekst">{item.tekst}</p>
-              <PijlLink href={item.href}>{item.linkTekst}</PijlLink>
+            <Reveal as="li" key={item.href} delay={i * 0.06} className="flex">
+              <div className="verder-kaart flex-1">
+                <p className="eyebrow">{item.eyebrow}</p>
+                <h3 className="h3">{item.titel}</h3>
+                <p className="subtekst">{item.tekst}</p>
+                <PijlLink href={item.href}>{item.linkTekst}</PijlLink>
+              </div>
             </Reveal>
           ))}
         </ul>

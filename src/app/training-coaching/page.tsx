@@ -76,8 +76,7 @@ export default function TrainingCoaching() {
 
       <TekstSectie eyebrow="Onderwerpen" titel="Onderwerpen die aansluiten bij de praktijk." id="onderwerpen" achtergrond="turkoois">
         <p className="subtekst">
-          We stellen trainingen en coachtrajecten altijd op maat samen, nooit als vast programma. Onderwerpen die vaak
-          terugkomen:
+          We stellen trainingen en coachtrajecten altijd op maat samen. Onderwerpen die vaak terugkomen:
         </p>
         <BlokLijst
           kolommen={2}
@@ -102,7 +101,7 @@ export default function TrainingCoaching() {
           { titel: "Vraagstuk", tekst: "Wat speelt er precies, en bij wie? We brengen de vraag achter de vraag in kaart." },
           { titel: "Doel", tekst: "We bepalen samen wat succes betekent: welk gedrag of resultaat willen we zien?" },
           { titel: "Training of coaching", tekst: "We ontwerpen en verzorgen het traject dat bij de vraag en de deelnemers past." },
-          { titel: "Toepassen", tekst: "Het geleerde wordt direct beoefend in de eigen werksituatie, niet alleen in de trainingsruimte." },
+          { titel: "Toepassen", tekst: "Deelnemers oefenen het geleerde direct in hun eigen werksituatie." },
           { titel: "Evalueren", tekst: "We toetsen wat werkt in de praktijk en wat nog schuurt." },
           { titel: "Verbeteren", tekst: "Op basis daarvan stellen we bij, zodat de ontwikkeling ook na afloop doorgaat." },
         ]}

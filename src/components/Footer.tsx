@@ -52,7 +52,7 @@ export function Footer() {
                 <EmailAdres />
               </a>
             </li>
-            <li className="text-[rgba(247,244,238,0.85)]">
+            <li className="footer-gedempt">
               {site.city}, {site.region}
             </li>
             <li>

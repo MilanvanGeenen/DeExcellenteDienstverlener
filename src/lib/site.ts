@@ -42,7 +42,7 @@ export const services = [
     href: "/advies/",
     title: "Advies",
     linkLabel: "Meer over advies",
-    summary: "Van vraagstuk naar een aanpak die de organisatie echt verder helpt.",
+    summary: "Van vraagstuk naar een aanpak die de organisatie verder helpt.",
   },
 ] as const;
 
@@ -89,13 +89,13 @@ export const workSteps = [
     title: "In beweging komen",
     short: "Welke aanpak past hierbij?",
     question: "Welke interventie past?",
-    text: "Op basis van de vorige stappen kiezen we de vorm die het beste past: een teamtraject, een training, coaching, advies of een combinatie. Altijd maatwerk, nooit een vast programma van de plank.",
+    text: "Op basis van de vorige stappen kiezen we de vorm die het beste past: een teamtraject, een training, coaching, advies of een combinatie. Altijd maatwerk.",
   },
   {
     title: "Toepassen",
     short: "Het geleerde landt in de praktijk.",
     question: "Hoe komt het geleerde in de praktijk terecht?",
-    text: "Inzicht alleen is niet genoeg. We zorgen dat nieuwe afspraken, vaardigheden en gedrag ook echt worden toegepast in het dagelijkse werk, niet alleen in de trainingsruimte of tijdens de sessie.",
+    text: "Inzicht alleen is niet genoeg. We zorgen dat mensen nieuwe afspraken, vaardigheden en gedrag toepassen in hun dagelijkse werk, ook buiten de trainingsruimte.",
   },
   {
     title: "Verbeteren",

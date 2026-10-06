@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "Is dit hetzelfde als een teambuildingsdag?",
     answer:
-      "Nee. Een teambuildingsdag kan onderdeel zijn van een traject, maar teamontwikkeling gaat verder: het richt zich op blijvende verandering in hoe een team samenwerkt, niet op een leuke gezamenlijke activiteit.",
+      "Nee. Een teambuildingsdag kan onderdeel zijn van een traject. Teamontwikkeling richt zich op blijvende verandering in hoe een team samenwerkt.",
   },
   {
     question: "Hoe lang duurt een traject?",
@@ -25,7 +25,7 @@ const faqs = [
   {
     question: "Werken jullie met modellen of testen?",
     answer:
-      "Waar het waarde toevoegt, gebruiken we bewezen modellen en inzichten. Maar een model is een hulpmiddel, geen doel op zich: we passen alleen toe wat aansluit bij het vraagstuk.",
+      "Waar het waarde toevoegt, gebruiken we bewezen modellen en inzichten. Een model is voor ons een hulpmiddel: we gebruiken alleen wat aansluit bij het vraagstuk.",
   },
   {
     question: "Kan dit naast de dagelijkse werkzaamheden?",
@@ -49,7 +49,7 @@ export default function Teamontwikkeling() {
       />
 
       <TekstSectie eyebrow="Herkenbaar" titel="Waar lopen teams vaak tegenaan?" id="knelpunten">
-        <p className="subtekst">Geen twee teams zijn hetzelfde, maar een aantal knelpunten zien we vaak terugkomen:</p>
+        <p className="subtekst">Elk team is anders. Deze knelpunten zien we vaak terugkomen:</p>
         <BlokLijst
           kolommen={2}
           items={[
@@ -67,8 +67,7 @@ export default function Teamontwikkeling() {
 
       <TekstSectie eyebrow="Aanleiding" titel="Wanneer is teamontwikkeling relevant?" id="aanleiding" achtergrond="turkoois">
         <p className="lead">
-          Teamontwikkeling is niet alleen bedoeld voor teams die vastlopen. Ook bij groei, een nieuwe leidinggevende,
-          een fusie van afdelingen of een verandertraject loont het om bewust te investeren in samenwerking in teams.
+          Ook teams die niet vastlopen hebben er baat bij. Bij groei, een nieuwe leidinggevende, een fusie van afdelingen of een verandertraject loont het om bewust te investeren in samenwerking in teams.
         </p>
         <BlokLijst
           items={[
@@ -86,7 +85,7 @@ export default function Teamontwikkeling() {
         titel="Hoe ziet een traject eruit?"
         stappen={[
           { titel: "Verkennen", tekst: "We starten met gesprekken over wat er speelt, vanuit meerdere perspectieven binnen het team." },
-          { titel: "Analyseren", tekst: "We brengen patronen, dynamiek en knelpunten in kaart: niet alleen wát er gebeurt, maar ook waardoor." },
+          { titel: "Analyseren", tekst: "We brengen patronen, dynamiek en knelpunten in kaart en zoeken uit waardoor ze ontstaan." },
           { titel: "Interventie op maat", tekst: "Daarna stellen we een aanpak samen: workshops, teamsessies, coaching on the job of een combinatie." },
           { titel: "Evalueren en verankeren", tekst: "We toetsen wat werkt en zorgen dat nieuwe afspraken en gedrag blijven, ook als wij er niet meer bij zijn." },
         ]}
@@ -94,8 +93,7 @@ export default function Teamontwikkeling() {
 
       <TekstSectie eyebrow="Resultaat" titel="Wat levert het op?" id="resultaat">
         <p className="subtekst">
-          Het doel is niet een leuke dag of eenmalige teambuilding, maar een blijvende verbetering in hoe het team
-          samenwerkt. Geen verzonnen percentages, wel de verschuivingen die we in de praktijk terugzien:
+          Het doel is een blijvende verbetering in hoe het team samenwerkt. Dit zijn de verschuivingen die we in de praktijk terugzien:
         </p>
         <ul className="resultaat-lijst">
           <li>Meer vertrouwen</li>
